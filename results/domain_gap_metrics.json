@@ -1,0 +1,23 @@
+{
+  "source_domain": "Urban",
+  "target_domain": "Rural",
+  "source_miou": 0.389345,
+  "target_baseline_miou": 0.233854,
+  "domain_gap": 0.155491,
+  "source_class_ious": {
+    "building": 0.4354404207723342,
+    "road": 0.44897035776336547,
+    "water": 0.5556878255955057,
+    "barren": 0.04839020812198112,
+    "forest": 0.3848346144112062,
+    "agriculture": 0.46274543946446645
+  },
+  "target_baseline_class_ious": {
+    "building": 0.22961376018910262,
+    "road": 0.200299561236833,
+    "water": 0.382075836637894,
+    "barren": 0.0215108123659145,
+    "forest": 0.14653299360716257,
+    "agriculture": 0.4230881987920083
+  }
+}

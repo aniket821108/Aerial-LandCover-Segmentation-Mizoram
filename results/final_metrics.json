@@ -1,0 +1,21 @@
+{
+  "baseline_rural_miou": 0.233854,
+  "cbst_rural_miou": 0.279016,
+  "delta_improvement": 0.045163,
+  "baseline_class_ious": {
+    "building": 0.22961376018910262,
+    "road": 0.200299561236833,
+    "water": 0.382075836637894,
+    "barren": 0.0215108123659145,
+    "forest": 0.14653299360716257,
+    "agriculture": 0.4230881987920083
+  },
+  "cbst_class_ious": {
+    "building": 0.22404178790207835,
+    "road": 0.3130067181894288,
+    "water": 0.4615464770956291,
+    "barren": 0.013911683333610389,
+    "forest": 0.17969208713330756,
+    "agriculture": 0.48189761486786037
+  }
+}
