@@ -125,6 +125,7 @@ router.post("/scan", upload.single("image"), async (req, res) => {
       originalUrl: `/uploads/${path.basename(filePath)}`,
       maskUrl: mlResult.mask_url,
       overlayUrl: mlResult.overlay_url,
+      geotiffUrl: mlResult.geotiff_url,
       maskBase64: mlResult.mask_base64,
       overlayBase64: mlResult.overlay_base64,
       geminiAnalysis: geminiResult,
@@ -155,6 +156,7 @@ router.post("/scan", upload.single("image"), async (req, res) => {
       original_url: recordData.originalUrl,
       mask_url: recordData.maskUrl,
       overlay_url: recordData.overlayUrl,
+      geotiff_url: recordData.geotiffUrl,
       mask_base64: recordData.maskBase64,
       overlay_base64: recordData.overlayBase64
     });
@@ -191,6 +193,7 @@ router.post("/scan-sample/:sampleId", async (req, res) => {
       originalUrl: `/samples/${sampleFilename}`,
       maskUrl: mlResult.mask_url,
       overlayUrl: mlResult.overlay_url,
+      geotiffUrl: mlResult.geotiff_url || `/samples/scene_${sampleId}_seg.tif`,
       maskBase64: mlResult.mask_base64,
       overlayBase64: mlResult.overlay_base64,
       geminiAnalysis: geminiResult,
@@ -219,6 +222,7 @@ router.post("/scan-sample/:sampleId", async (req, res) => {
       original_url: recordData.originalUrl,
       mask_url: recordData.maskUrl,
       overlay_url: recordData.overlayUrl,
+      geotiff_url: recordData.geotiffUrl,
       mask_base64: recordData.maskBase64,
       overlay_base64: recordData.overlayBase64
     });

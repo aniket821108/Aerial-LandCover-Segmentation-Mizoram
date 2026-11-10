@@ -47,7 +47,7 @@ flowchart TD
 | :--- | :--- | :--- |
 | **Frontend** | React 19 + Vite + Tailwind CSS | Interactive dashboard, Before/After split slider, Opacity blend, Recharts analytics |
 | **Backend Gateway** | Node.js + Express.js + Mongoose | Multipart uploads, Gemini Vision guardrail, API proxy, history persistence |
-| **Database** | MongoDB (`localhost:27017`) | Stores scan history, timestamps, class breakdowns, and hectare metrics |
+| **Database** | MongoDB Atlas (Cloud) / Local | Persistent storage of scan history, timestamps, class breakdowns, and hectare metrics |
 | **ML Microservice** | Python 3 + FastAPI + Uvicorn | PyTorch DeepLabV3+, GDAL surface hectare quantification, GeoTIFF processing |
 | **Multimodal AI** | Google Gemini 1.5 Flash | Pre-inference domain validation and natural language terrain synthesis |
 
@@ -98,18 +98,22 @@ web_app/
 ### 1. Prerequisites
 - **Node.js**: v18+ (tested on v22.20.0)
 - **Python**: 3.10+ (tested on Python 3.13)
-- **MongoDB**: Running locally on `mongodb://localhost:27017` (app includes graceful fallback if MongoDB is offline)
+- **MongoDB**: MongoDB Atlas Cloud Cluster or Local MongoDB (`mongodb://localhost:27017`)
 
 ### 2. Configure Environment Variables
-In `server/.env`:
+Copy `server/.env.example` to `server/.env` and update your settings:
 ```env
 PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/aerial_segmentation
+
+# Online MongoDB Atlas (or local mongodb://127.0.0.1:27017/aerial_segmentation)
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxx.mongodb.net/aerial_segmentation?retryWrites=true&w=majority
+
 ML_SERVICE_URL=http://127.0.0.1:8000
-# Optional: Paste your Gemini API key from https://aistudio.google.com/
+
+# Google Gemini Vision API Key (from https://aistudio.google.com/)
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
-*(Note: If no Gemini key is provided, the system seamlessly operates in intelligent offline guardrail mode with sample scenarios).*
+*(Note: If no Gemini key is provided, the system seamlessly operates in intelligent offline guardrail mode with simulated out-of-domain rejection).*
 
 ### 3. Launching the Application
 Simply double-click `start_all.bat` or run:
@@ -147,3 +151,4 @@ Open your browser to: **`http://localhost:5173`**
 4. **Guardrail Demonstration:** Click **"Test Non-Aerial"** to verify that Gemini Vision AI catches non-aerial photos (pets, portraits, indoor scenes) and stops out-of-domain inputs before inference.
 5. **GIS Analytics:** View Recharts Donut & Bar charts of real-world coverage in Hectares and $m^2$, and export JSON reports.
 6. **MongoDB History:** View and reload past scans with a dedicated history drawer.
+

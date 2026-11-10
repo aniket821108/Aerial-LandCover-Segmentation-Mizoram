@@ -82,6 +82,7 @@ export default function App() {
         originalUrl: data.original_url || URL.createObjectURL(file),
         maskUrl: data.mask_base64 || data.mask_url,
         overlayUrl: data.overlay_base64 || data.overlay_url,
+        geotiffUrl: data.geotiff_url,
         guardrail: data.guardrail,
         metrics: data.metrics,
       });
@@ -113,6 +114,7 @@ export default function App() {
           originalUrl: data.original_url,
           maskUrl: data.mask_base64 || data.mask_url,
           overlayUrl: data.overlay_base64 || data.overlay_url,
+          geotiffUrl: data.geotiff_url,
           guardrail: data.guardrail,
           metrics: data.metrics,
         });
@@ -135,6 +137,7 @@ export default function App() {
       originalUrl: record.originalUrl,
       maskUrl: record.maskBase64 || record.maskUrl,
       overlayUrl: record.overlayBase64 || record.overlayUrl,
+      geotiffUrl: record.geotiffUrl,
       guardrail: record.geminiAnalysis,
       metrics: record.metrics,
     });
@@ -221,6 +224,7 @@ export default function App() {
                 originalSrc={activeScan.originalUrl}
                 maskSrc={activeScan.maskUrl}
                 overlaySrc={activeScan.overlayUrl}
+                geotiffSrc={activeScan.geotiffUrl}
                 filename={activeScan.filename.replace(/\.[^/.]+$/, '')}
               />
             </div>

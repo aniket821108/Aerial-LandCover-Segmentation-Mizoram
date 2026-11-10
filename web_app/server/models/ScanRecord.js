@@ -42,3 +42,4 @@ const scanRecordSchema = new mongoose.Schema(
 );
 
 export const ScanRecord = mongoose.model("ScanRecord", scanRecordSchema);
+

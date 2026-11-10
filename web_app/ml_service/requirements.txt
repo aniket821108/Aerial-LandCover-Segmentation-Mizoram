@@ -5,3 +5,4 @@ numpy>=2.0.0
 matplotlib>=3.9.0
 pydantic>=2.9.0
 python-multipart>=0.0.12
+

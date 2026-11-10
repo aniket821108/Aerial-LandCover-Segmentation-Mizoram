@@ -5,6 +5,7 @@ export default function ComparisonViewer({
   originalSrc,
   maskSrc,
   overlaySrc,
+  geotiffSrc,
   filename = 'aerial_scene'
 }) {
   const [sliderPos, setSliderPos] = useState(50);
@@ -137,6 +138,17 @@ export default function ComparisonViewer({
               <Download className="w-3.5 h-3.5 text-emerald-400" />
               Overlay
             </button>
+            {geotiffSrc && (
+              <a
+                href={geotiffSrc}
+                download={`${filename}_segmented.tif`}
+                className="px-2.5 py-1.5 text-xs font-medium rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center gap-1.5"
+                title="Download Calibrated 8-bit GeoTIFF (.tif) for QGIS/ArcGIS"
+              >
+                <Download className="w-3.5 h-3.5 text-purple-400" />
+                GeoTIFF (.tif)
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -250,3 +262,4 @@ export default function ComparisonViewer({
     </div>
   );
 }
+

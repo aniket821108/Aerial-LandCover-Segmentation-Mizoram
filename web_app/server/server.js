@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/aerial_segmentation";
+const MONGO_URI = process.env.MONGO_URI //|| "mongodb://127.0.0.1:27017/aerial_segmentation";
 
 // Middlewares
 app.use(cors());
@@ -55,3 +55,4 @@ app.listen(PORT, () => {
   console.log(`  Connected ML Service: ${process.env.ML_SERVICE_URL || "http://127.0.0.1:8000"}`);
   console.log("=" * 60);
 });
+

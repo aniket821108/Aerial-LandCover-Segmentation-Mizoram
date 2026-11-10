@@ -84,3 +84,4 @@ export default function GuardrailBadge({ guardrail, isRejected }) {
     </div>
   );
 }
+

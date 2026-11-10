@@ -20,3 +20,4 @@ Write-Host "`nAll 3 services successfully launched!" -ForegroundColor Green
 Write-Host "  -> React UI Dashboard : http://localhost:5173" -ForegroundColor Yellow
 Write-Host "  -> Express API Gateway: http://localhost:5000" -ForegroundColor Yellow
 Write-Host "  -> Python ML Service  : http://localhost:8000" -ForegroundColor Yellow
+

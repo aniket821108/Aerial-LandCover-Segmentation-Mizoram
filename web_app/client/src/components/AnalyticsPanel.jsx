@@ -242,3 +242,4 @@ export default function AnalyticsPanel({ metrics, filename = 'survey_report' }) 
     </div>
   );
 }
+

@@ -295,9 +295,14 @@ async def run_segmentation(
         base_id = os.path.splitext(filename)[0]
         out_mask_path = os.path.join(OUTPUTS_DIR, f"{base_id}_mask.png")
         out_overlay_path = os.path.join(OUTPUTS_DIR, f"{base_id}_overlay.png")
+        out_tif_path = os.path.join(OUTPUTS_DIR, f"{base_id}_segmented.tif")
 
         mask_img.save(out_mask_path)
         overlay_img.save(out_overlay_path)
+
+        # Save single-band 8-bit calibrated raster (GeoTIFF format)
+        tif_img = Image.fromarray(pred.astype(np.uint8))
+        tif_img.save(out_tif_path, format="TIFF")
 
         # Calculate GIS Metrics
         metrics = calculate_landuse_metrics(pred, gsd)
@@ -317,6 +322,7 @@ async def run_segmentation(
             "image_dimensions": {"width": w, "height": h},
             "mask_url": f"/outputs/{base_id}_mask.png",
             "overlay_url": f"/outputs/{base_id}_overlay.png",
+            "geotiff_url": f"/outputs/{base_id}_segmented.tif",
             "mask_base64": mask_base64,
             "overlay_base64": overlay_base64,
             "metrics": metrics
@@ -331,3 +337,4 @@ async def run_segmentation(
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
+

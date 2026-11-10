@@ -107,3 +107,4 @@ export default function HistoryDrawer({ isOpen, onClose, history, onSelectRecord
     </div>
   );
 }
+

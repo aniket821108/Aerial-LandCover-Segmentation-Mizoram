@@ -220,3 +220,4 @@ export default function ImageUploader({ onAnalyze, onSampleSelect, isProcessing,
     </div>
   );
 }
+
