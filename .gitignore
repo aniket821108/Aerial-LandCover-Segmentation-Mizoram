@@ -1,0 +1,16 @@
+# Model weights and checkpoints
+*.pth
+*.pt
+*.ckpt
+*.h5
+checkpoints/
+
+# Intermediate cache
+pseudo_labels/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Environment files
+.env
+venv/
