@@ -38,3 +38,4 @@ EXPOSE 10000
 
 # Start both Python ML microservice (127.0.0.1:8000) and Express server (0.0.0.0:$PORT)
 CMD ["sh", "-c", "cd /app/web_app/ml_service && python -m uvicorn service:app --host 127.0.0.1 --port 8000 & cd /app/web_app/server && node server.js"]
+

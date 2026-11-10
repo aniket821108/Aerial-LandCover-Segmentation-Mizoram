@@ -75,3 +75,4 @@ Scroll down to the **"Environment Variables"** section and click **"Add Environm
 3. Click **"Scene 2522"** or **"Scene 2532"** to run segmentation.
 4. Click **"Test Non-Aerial"** to verify the Gemini Vision Guardrail.
 5. Check your MongoDB Atlas dashboard $\rightarrow$ browse collections $\rightarrow$ you will see new scans logged into `aerial_segmentation.scanrecords`!
+
