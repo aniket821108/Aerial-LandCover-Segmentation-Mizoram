@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: aeroseg-ai
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: ML_SERVICE_URL
+        value: http://127.0.0.1:8000
+      - key: MONGO_URI
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

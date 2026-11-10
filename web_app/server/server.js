@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import scanRoutes from "./routes/scanRoutes.js";
 
@@ -13,7 +14,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI //|| "mongodb://127.0.0.1:27017/aerial_segmentation";
+const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/aerial_segmentation";
 
 // Middlewares
 app.use(cors());
@@ -27,6 +28,24 @@ app.use("/samples", express.static(path.join(__dirname, "samples")));
 
 // Routes
 app.use("/api", scanRoutes);
+
+// Serve Frontend Static SPA if client/dist exists (Render/Production deployment)
+const clientDist = path.join(__dirname, "../client/dist");
+if (fs.existsSync(clientDist)) {
+  console.log(`  [PRODUCTION] Serving React SPA build from ${clientDist}`);
+  app.use(express.static(clientDist));
+  app.get("*", (req, res, next) => {
+    if (
+      req.path.startsWith("/api") ||
+      req.path.startsWith("/uploads") ||
+      req.path.startsWith("/outputs") ||
+      req.path.startsWith("/samples")
+    ) {
+      return next();
+    }
+    res.sendFile(path.join(clientDist, "index.html"));
+  });
+}
 
 // System Health Endpoint
 app.get("/api/health", (req, res) => {
