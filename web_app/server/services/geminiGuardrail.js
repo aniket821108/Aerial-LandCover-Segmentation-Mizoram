@@ -63,8 +63,8 @@ Return ONLY a valid JSON object strictly matching this schema:
 }
 `;
 
-  // Try live models: gemini-1.5-flash, gemini-2.0-flash, gemini-1.5-pro
-  const candidateModels = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro", "gemini-flash-latest"];
+  // Try active models (gemini-flash-latest first for broader compatibility)
+  const candidateModels = ["gemini-flash-latest", "gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"];
   
   for (const modelName of candidateModels) {
     try {
