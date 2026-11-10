@@ -23,6 +23,23 @@ Deep learning models trained on structured urban cities suffer severe degradatio
 
 ---
 
+## 🖼️ Visual Demonstration: Original Image vs. Classified Output
+Below is an empirical demonstration of the adapted model performing pixel-wise land-use classification on a representative rural aerial scene (Scene 2522):
+
+### 1. Two-Panel View: Raw Input vs. Predicted Segmentation
+![Original vs Classified](results/original_vs_classified.png)
+
+### 2. Three-Panel View with Superimposed Translucent Overlay
+![Classification Comparison with Overlay](results/classification_comparison.png)
+
+* 🔴 **Building (Red):** Accurate rooftop localization on scattered rural settlements.
+* 🟡 **Road (Yellow):** Continuous extraction of narrow, unpaved rural tracks (+11.27% IoU gain!).
+* 🔵 **Water (Blue):** Clear boundary identification of natural ponds and irrigation streams.
+* 🟢 **Forest (Green):** Dense canopy coverage on hillsides.
+* 🌾 **Agriculture (Tan/Orange):** Precision mapping of terraced farmland and crop parcels (71.3% of scene).
+
+---
+
 ## 🎯 Classification Categories (6 Target Land-Use Classes)
 The pipeline classifies high-resolution overhead scenes into **6 primary land-use categories** (+ Background, with invalid boundary pixels mapped to `IGNORE_INDEX = 255`):
 1. 🏢 **Building (Urban):** Rooftops, built structures

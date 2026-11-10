@@ -5,8 +5,9 @@
 *.h5
 checkpoints/
 
-# Intermediate cache
+# Intermediate cache and bulk batch rasters
 pseudo_labels/
+gdal_outputs/batch_exports/
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
