@@ -91,7 +91,8 @@ Return ONLY a valid JSON object strictly matching this schema:
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(6000)
       });
 
       if (!response.ok) {

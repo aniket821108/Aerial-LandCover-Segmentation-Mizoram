@@ -219,6 +219,12 @@ class SegmentRequest(BaseModel):
     gsd: Optional[float] = 0.3
 
 
+@app.get("/")
+@app.head("/")
+def root():
+    return {"status": "ok", "service": "Aerial Segmentation ML Microservice"}
+
+
 @app.get("/health")
 def health_check():
     return {
