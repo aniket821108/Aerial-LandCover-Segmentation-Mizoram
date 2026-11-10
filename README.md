@@ -170,3 +170,26 @@ Beyond standard tensor evaluation, the notebook features an end-to-end geospatia
 2. Ensure GPU runtime is selected (`T4 GPU`).
 3. Set your Google Drive dataset path to `LoveDA_Project/` (containing `Train` and `Val`).
 4. Execute cells sequentially. Checkpoints, GeoTIFFs, and figures will automatically sync to your Drive.
+
+---
+
+## 🌐 Full-Stack Web Application (MERN + Python ML Microservice)
+
+The project includes an interactive web platform located in [`web_app/`](web_app/README.md) featuring a **Two-Tier Multimodal AI Pipeline**:
+
+1. **Tier 1 (Multimodal Domain Guardrail):** Google Gemini 1.5 Flash Vision AI checks whether uploaded images are valid overhead orthogonal aerial or satellite scenes with target land-cover classes (Building, Road, Water, Barren, Forest, Agriculture). If an out-of-domain image is uploaded (e.g., selfies, pets, cars, indoor photos), it is rejected before invoking the segmentation model.
+2. **Tier 2 (DeepLabV3+ Segmentation & GDAL Analytics):** DeepLabV3+ ResNet-50 CBST performs pixel-level semantic classification. The GDAL engine quantifies real-world surface area in Hectares ($Ha$) and $m^2$ ($0.3\text{m GSD} \implies 0.09\text{ m}^2/\text{pixel}$).
+3. **Interactive Visual Dashboard:**
+   - **Split Comparison Slider:** Slide left/right to peel away the raw aerial orthophoto and reveal the segmented mask underneath.
+   - **Opacity Blend Slider:** 0% to 100% alpha blending for boundary inspection.
+   - **1-Click Sample Scenes:** Instant testing with rural Mizoram scenes (Scene 2522, 2532, 2544).
+   - **Recharts Analytics:** Donut & Bar charts of physical hectares and percentage coverage.
+   - **MongoDB Scan History:** Persistent database records of previous scans.
+
+### Quick Start
+```powershell
+# From Aerial_Segmentation_Mizoram/web_app:
+./start_all.ps1
+```
+Then visit **`http://localhost:5173`** in your browser.
+
