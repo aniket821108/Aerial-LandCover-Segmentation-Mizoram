@@ -115,3 +115,4 @@ gallery_out = os.path.join(out_dir, "slide_segmentation_gallery_16x9.png")
 plt.savefig(gallery_out, dpi=220, bbox_inches="tight")
 plt.close()
 print(f"[OK] Generated Master 16:9 Showcase: {gallery_out}")
+
