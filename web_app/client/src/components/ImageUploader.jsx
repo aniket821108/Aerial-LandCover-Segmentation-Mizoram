@@ -1,7 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, Image as ImageIcon, Sparkles, AlertCircle, FileText, CheckCircle } from 'lucide-react';
 
-export default function ImageUploader({ onAnalyze, onSampleSelect, isProcessing, currentStep }) {
+export default function ImageUploader({
+  onAnalyze,
+  onSampleSelect,
+  isAnalyzing = false,
+  currentStep = '',
+  sampleLoadingId = null
+}) {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -105,20 +111,24 @@ export default function ImageUploader({ onAnalyze, onSampleSelect, isProcessing,
           {sampleScenes.map((s) => (
             <button
               key={s.id}
-              disabled={isProcessing}
+              disabled={isAnalyzing || Boolean(sampleLoadingId)}
               onClick={() => onSampleSelect(s.id)}
-              className={`px-2.5 py-1 text-xs rounded-lg border font-medium transition-all flex items-center gap-1 disabled:opacity-50 ${s.color}`}
+              className={`px-2.5 py-1 text-xs rounded-lg border font-medium transition-all flex items-center gap-1.5 disabled:opacity-50 ${s.color}`}
             >
-              <span>{s.icon}</span>
+              {sampleLoadingId === s.id ? (
+                <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <span>{s.icon}</span>
+              )}
               <span>{s.name.split(' ')[0]}</span>
               <span className="text-[10px] opacity-80">({s.tag})</span>
             </button>
           ))}
           <button
             onClick={handleTestNegative}
-            disabled={isProcessing}
+            disabled={isAnalyzing || Boolean(sampleLoadingId)}
             title="Demonstrate Gemini Guardrail rejecting non-aerial input"
-            className="px-2.5 py-1 text-xs rounded-lg border border-red-500/40 text-red-300 bg-red-950/20 hover:bg-red-900/30 transition flex items-center gap-1"
+            className="px-2.5 py-1 text-xs rounded-lg border border-red-500/40 text-red-300 bg-red-950/20 hover:bg-red-900/30 transition flex items-center gap-1 disabled:opacity-50"
           >
             <span>🚫</span>
             <span>Test Non-Aerial</span>
@@ -148,7 +158,7 @@ export default function ImageUploader({ onAnalyze, onSampleSelect, isProcessing,
           }`}
         >
           {previewUrl ? (
-            <div className="flex items-center gap-4 text-left w-full max-w-md bg-slate-900/90 p-3 rounded-xl border border-slate-700">
+            <div className="flex items-center gap-4 text-left w-full max-w-md bg-slate-900/90 p-3 rounded-xl border border-slate-700 relative">
               <img
                 src={previewUrl}
                 alt="Upload preview"
@@ -162,6 +172,18 @@ export default function ImageUploader({ onAnalyze, onSampleSelect, isProcessing,
                   {(selectedFile?.size ? (selectedFile.size / (1024 * 1024)).toFixed(2) + ' MB' : 'Ready')} • Click to change file
                 </p>
               </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedFile(null);
+                  setPreviewUrl(null);
+                }}
+                className="p-1 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-800 transition"
+                title="Remove selected file"
+              >
+                ✕
+              </button>
             </div>
           ) : (
             <>
@@ -196,17 +218,27 @@ export default function ImageUploader({ onAnalyze, onSampleSelect, isProcessing,
 
           <button
             type="submit"
-            disabled={!selectedFile || isProcessing}
+            disabled={!selectedFile || isAnalyzing || Boolean(sampleLoadingId)}
             className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center gap-2 shadow-lg ${
-              !selectedFile || isProcessing
+              !selectedFile || isAnalyzing || Boolean(sampleLoadingId)
                 ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
-                : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-cyan-500/25'
+                : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-cyan-500/25 active:scale-95'
             }`}
           >
-            {isProcessing ? (
+            {isAnalyzing ? (
               <>
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span>{currentStep || 'Analyzing...'}</span>
+                <span>{currentStep || 'Analyzing Scene...'}</span>
+              </>
+            ) : sampleLoadingId ? (
+              <>
+                <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                <span>Loading Benchmark Sample...</span>
+              </>
+            ) : !selectedFile ? (
+              <>
+                <UploadCloud className="w-4 h-4 text-slate-500" />
+                <span>Select Image to Segment</span>
               </>
             ) : (
               <>

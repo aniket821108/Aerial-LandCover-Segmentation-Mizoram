@@ -9,7 +9,8 @@ import HistoryDrawer from './components/HistoryDrawer';
 
 export default function App() {
   const [activeScan, setActiveScan] = useState(null);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [sampleLoadingId, setSampleLoadingId] = useState(null);
   const [currentStep, setCurrentStep] = useState('');
   const [isRejected, setIsRejected] = useState(false);
   const [rejectedGuardrail, setRejectedGuardrail] = useState(null);
@@ -17,12 +18,10 @@ export default function App() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [serverStatus, setServerStatus] = useState(null);
 
-  // Initial Load: Fetch status, history & load default scene 2522
+  // Initial Load: Fetch health & history (instant load without blocking UI)
   useEffect(() => {
     fetchHealth();
     fetchHistory();
-    // Pre-load Scene 2522 by default
-    handleSampleSelect('2522');
   }, []);
 
   const fetchHealth = async () => {
@@ -51,7 +50,7 @@ export default function App() {
 
   // Upload & Process Custom Image
   const handleAnalyze = async (file, gsd = 0.3) => {
-    setIsProcessing(true);
+    setIsAnalyzing(true);
     setIsRejected(false);
     setRejectedGuardrail(null);
     setCurrentStep('Tier 1: Gemini Vision AI Domain Guardrail...');
@@ -72,7 +71,6 @@ export default function App() {
         // Rejected by Tier 1 Gemini Guardrail
         setIsRejected(true);
         setRejectedGuardrail(data.guardrail);
-        setIsProcessing(false);
         return;
       }
 
@@ -92,17 +90,16 @@ export default function App() {
       console.error('Scan failed:', err);
       alert('Analysis error: ' + err.message);
     } finally {
-      setIsProcessing(false);
+      setIsAnalyzing(false);
       setCurrentStep('');
     }
   };
 
   // 1-Click Load for Sample Scenes
   const handleSampleSelect = async (sampleId) => {
-    setIsProcessing(true);
+    setSampleLoadingId(sampleId);
     setIsRejected(false);
     setRejectedGuardrail(null);
-    setCurrentStep(`Loading Scene ${sampleId} & Running CBST Segmentation...`);
 
     try {
       const res = await fetch(`/api/scan-sample/${sampleId}`, { method: 'POST' });
@@ -123,8 +120,7 @@ export default function App() {
     } catch (err) {
       console.error('Sample scan error:', err);
     } finally {
-      setIsProcessing(false);
-      setCurrentStep('');
+      setSampleLoadingId(null);
     }
   };
 
@@ -184,9 +180,25 @@ export default function App() {
         <ImageUploader
           onAnalyze={handleAnalyze}
           onSampleSelect={handleSampleSelect}
-          isProcessing={isProcessing}
+          isAnalyzing={isAnalyzing}
           currentStep={currentStep}
+          sampleLoadingId={sampleLoadingId}
         />
+
+        {/* Section 1.5: Quick-Start Guide when no scan has run */}
+        {!activeScan && !isRejected && !isAnalyzing && !sampleLoadingId && (
+          <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 text-center space-y-2.5 backdrop-blur-sm">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-lg">
+              🛰️
+            </div>
+            <h3 className="text-base font-semibold text-slate-200">
+              Interactive Aerial Land-Cover Classification
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
+              Upload an orthogonal aerial survey orthophoto (.png, .jpg, .tif) above, or pick one of the <strong>Quick Samples</strong> (Farmland, Mountain Forest, River Basin) to view instant sub-meter DeepLabV3+ segmentation and GDAL real-world hectare analytics.
+            </p>
+          </div>
+        )}
 
         {/* Section 2: Guardrail Status Feedback (If Rejected or Verified) */}
         {isRejected && (

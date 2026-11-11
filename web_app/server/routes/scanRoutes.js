@@ -26,6 +26,9 @@ const ML_SERVICE_URL = process.env.ML_SERVICE_URL || "http://127.0.0.1:8000";
 // In-memory fallback history if MongoDB is temporarily offline
 const inMemoryHistory = [];
 
+// In-memory cache for sample scene scans (returns instant response on repeat clicks)
+const sampleScanCache = {};
+
 /**
  * Call Python ML microservice for segmentation and GDAL metrics
  */
@@ -147,7 +150,7 @@ router.post("/scan", upload.single("image"), async (req, res) => {
       inMemoryHistory.unshift({ ...recordData, _id: savedId });
     }
 
-    return res.json({
+    const responsePayload = {
       success: true,
       scan_id: savedId,
       guardrail_passed: true,
@@ -159,7 +162,9 @@ router.post("/scan", upload.single("image"), async (req, res) => {
       geotiff_url: recordData.geotiffUrl,
       mask_base64: recordData.maskBase64,
       overlay_base64: recordData.overlayBase64
-    });
+    };
+
+    return res.json(responsePayload);
 
   } catch (error) {
     console.error("[SCAN ERROR]", error);
@@ -178,6 +183,12 @@ router.post("/scan-sample/:sampleId", async (req, res) => {
 
     if (!fs.existsSync(samplePath)) {
       return res.status(404).json({ success: false, message: `Sample scene ${sampleId} not found.` });
+    }
+
+    // Instant return if cached
+    if (sampleScanCache[sampleId]) {
+      console.log(`[SAMPLE SCAN CACHE] Serving instant cached response for scene ${sampleId}`);
+      return res.json(sampleScanCache[sampleId]);
     }
 
     console.log(`[SAMPLE SCAN] Processing sample scene: ${sampleId}`);
@@ -247,7 +258,7 @@ router.post("/scan-sample/:sampleId", async (req, res) => {
       inMemoryHistory.unshift({ ...recordData, _id: savedId });
     }
 
-    return res.json({
+    const responsePayload = {
       success: true,
       scan_id: savedId,
       guardrail_passed: true,
@@ -259,7 +270,12 @@ router.post("/scan-sample/:sampleId", async (req, res) => {
       geotiff_url: recordData.geotiffUrl,
       mask_base64: recordData.maskBase64,
       overlay_base64: recordData.overlayBase64
-    });
+    };
+
+    // Cache successful sample response for subsequent instant access
+    sampleScanCache[sampleId] = responsePayload;
+
+    return res.json(responsePayload);
 
   } catch (error) {
     console.error("[SAMPLE SCAN ERROR]", error);
